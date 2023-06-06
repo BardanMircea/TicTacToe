@@ -1,20 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const gameOutcome = document.getElementsByClassName("gameOutcome")[0];
   const cells = document.querySelectorAll(".cell");
 
   const players = ["X", "O"];
   let currentPlayer = players[Math.floor(Math.random() * players.length)];
 
+  let isGameStillRunning = true;
   cells.forEach((cell) => {
     cell.addEventListener("click", () => {
-      currentPlayer = currentPlayer === "X" ? "O" : "X";
-      if (cell.textContent === "") {
+      if (cell.textContent === "" && isGameStillRunning) {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
         cell.textContent = currentPlayer;
-      }
+        const gameOutcomeMessage = document.createElement("p");
+        gameOutcomeMessage.setAttribute(
+          "style",
+          "text-align:center; font-size: 25px; color: green"
+        );
 
-      if (isWinningCondition(cells)) {
-        console.log(`${currentPlayer} wins`);
-      } else if (isDrawCondition(cells)) {
-        console.log("Draw");
+        gameOutcome.appendChild(gameOutcomeMessage);
+        if (isWinningCondition(cells)) {
+          isGameStillRunning = false;
+          gameOutcomeMessage.textContent = `${currentPlayer} wins`;
+        } else if (isDrawCondition(cells)) {
+          isGameStillRunning = false;
+          gameOutcomeMessage.textContent = "Draw";
+        }
       }
     });
   });
@@ -26,6 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.textContent = "";
         cell.removeAttribute("style", "color:red");
       });
+
+      while (gameOutcome.firstChild) {
+        gameOutcome.removeChild(gameOutcome.firstChild);
+      }
+
+      isGameStillRunning = true;
     });
 
   function isWinningCondition(cells) {
