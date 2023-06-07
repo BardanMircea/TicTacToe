@@ -22,7 +22,7 @@
   align-items: center;
 }
 
-/* CSS */
+/* imported style for button */
 .button1 {
   --b: 3px; /* border thickness */
   --s: 0.45em; /* size of the corner */
